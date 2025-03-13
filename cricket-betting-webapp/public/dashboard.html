@@ -40,6 +40,8 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Matches Button -->
+            <button id="matchesBtn" class="matches-button">MATCHES</button>
         </div>
         <!-- Admin Panel Button (hidden by default) -->
         <button id="adminPanelBtn" class="admin-button" style="display: none;">Admin Panel</button>
@@ -87,6 +89,10 @@
                 // Handle admin panel button click
                 document.getElementById('adminPanelBtn').addEventListener('click', () => {
                     window.location.href = '/admin-panel.html';
+                });
+                // Handle matches button click
+                document.getElementById('matchesBtn').addEventListener('click', () => {
+                    window.location.href = '/matches.html';
                 });
 
             } else {

@@ -4,12 +4,14 @@ const connectDB = require('./database');
 const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
 const adminRoutes = require('./routes/admin'); // Add admin routes
+const matchesRoutes = require('./routes/matches'); // Add matches routes
+const squadsRoutes = require('./routes/squads'); // Import the new squad routes
 const cors = require('cors');
 
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+//connectDB();
 
 // Middleware for CORS
 app.use(cors());
@@ -21,6 +23,8 @@ app.use(express.static('public'));
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/admin', adminRoutes); // Use admin routes
+app.use('/matches', matchesRoutes); // Use matches routes
+app.use('/squads', squadsRoutes); // Use squads routes
 
 // Route to serve the landing page
 app.get('/', (req, res) => {

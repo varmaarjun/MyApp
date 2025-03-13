@@ -100,4 +100,57 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = '/';
         });
     }
+
+    // Additional code for handling dashboard data and sorting
+    const token = localStorage.getItem('token');
+    if (token) {
+        fetch('/dashboard/data', {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display user's first name
+            const userFirstName = data.currentUser.name.split(' ')[0];
+            document.getElementById('userFirstName').innerText = userFirstName;
+
+            // Show admin panel button if user is admin
+            if (data.currentUser.role === 'admin') {
+                document.getElementById('adminPanelBtn').style.display = 'block';
+            }
+
+            // Function to populate the table with player data
+            const populateTable = (players) => {
+                const playersTableBody = document.getElementById('playersTableBody');
+                playersTableBody.innerHTML = ''; // Clear the table body
+
+                // Sort players by total of matchesWins and momWins
+                players.sort((a, b) => (b.matchesWins + b.momWins) - (a.matchesWins + a.momWins));
+
+                players.forEach((player, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${player.name}</td>
+                        <td>${player.balance || 0}</td>
+                        <td>${player.matchesWins || 0}</td>
+                        <td>${player.matchesLost || 0}</td>
+                        <td>${player.momWins || 0}</td>
+                    `;
+                    playersTableBody.appendChild(row);
+                });
+            };
+
+            // Initial table population with sorted data
+            populateTable(data.users);
+
+            // Handle admin panel button click
+            document.getElementById('adminPanelBtn').addEventListener('click', () => {
+                window.location.href = '/admin-panel.html';
+            });
+        })
+        .catch(error => {
+            alert('Failed to load dashboard');
+        });
+    }
 });

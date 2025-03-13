@@ -18,6 +18,8 @@
             <input type="number" id="topUpAmount" min="0" required>
             <button type="submit">Top Up Balance</button>
         </form>
+        <!-- Button to navigate back to the dashboard -->
+        <button id="backToDashboardBtn">Back to Dashboard</button>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -62,12 +64,19 @@
 
                     if (topUpResponse.ok) {
                         alert('Balance topped up successfully!');
-                        window.location.href = '/dashboard.html'; // Redirect back to dashboard
+                        // Stay on the admin panel page
                     } else {
                         const errorMsg = await topUpResponse.text(); // Get the error message
                         alert('Failed to top up balance: ' + errorMsg);
                     }
                 });
+
+                // Handle navigation back to the dashboard
+                const backToDashboardBtn = document.getElementById('backToDashboardBtn');
+                backToDashboardBtn.addEventListener('click', () => {
+                    window.location.href = '/dashboard.html';
+                });
+
             } else {
                 alert('Failed to load player data');
             }

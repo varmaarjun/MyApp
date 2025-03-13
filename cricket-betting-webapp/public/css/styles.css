@@ -174,3 +174,102 @@ tr:nth-child(even) {
 .dropdown:hover .dropdown-btn {
     background-color: #3e8e41;
 }
+
+/* New styles for the admin panel */
+.admin-panel-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 600px;
+    text-align: left;
+}
+
+.admin-panel-container h2 {
+    margin-bottom: 20px;
+}
+
+.admin-panel-container form {
+    margin-bottom: 20px;
+}
+
+#backToDashboardBtn {
+    display: inline-block;
+    background: #3498db;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#backToDashboardBtn:hover {
+    background: #2980b9;
+}
+/* New styles for the matches page */
+.matches-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    text-align: left;
+}
+
+.matches-container h2 {
+    margin-bottom: 20px;
+    color: #333; /* Ensure the heading is visible */
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.schedule-table th, .schedule-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.schedule-table th {
+    background-color: #3498db;
+    color: white;
+}
+
+.schedule-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.back-button {
+    display: inline-block;
+    background: #3498db;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background: #2980b9;
+}
+
+select {
+    padding: 5px;
+    border-radius: 5px;
+}
