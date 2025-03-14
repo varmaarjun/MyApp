@@ -12,6 +12,22 @@
   ],
   "routes": [
     {
+      "src": "/auth/(.*)",
+      "dest": "/api/auth/$1"
+    },
+    {
+      "src": "/dashboard/(.*)",
+      "dest": "/api/dashboard/$1"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/api/admin/$1"
+    },
+    {
+      "src": "/matches/(.*)",
+      "dest": "/api/matches/$1"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },
