@@ -15,7 +15,7 @@ connectDB();
 
 // Middleware for CORS
 app.use(cors({
-  origin: 'https://my-app-deploy-six.vercel.app', // Replace with your Vercel domain
+  origin: 'https://mycrick.netlify.app', // Replace with your Vercel domain
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
