@@ -7,7 +7,8 @@ const authenticateToken = (req, res, next) => {
     if (!token) return res.status(401).send('Access denied');
 
     try {
-        const verified = jwt.verify(token, 'your_jwt_secret_key');
+        //const verified = jwt.verify(token, 'your_jwt_secret_key');
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
         req.user = verified;
         next();
     } catch (err) {
@@ -16,3 +17,4 @@ const authenticateToken = (req, res, next) => {
 };
 
 module.exports = authenticateToken;
+
