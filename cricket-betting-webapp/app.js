@@ -14,7 +14,11 @@ const app = express();
 connectDB();
 
 // Middleware for CORS
-app.use(cors());
+app.use(cors({
+  origin: 'https://my-app-deploy-six.vercel.app', // Replace with your Vercel domain
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
