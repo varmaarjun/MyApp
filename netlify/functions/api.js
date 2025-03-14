@@ -1,11 +1,12 @@
 const express = require('express');
 const serverless = require('serverless-http');
+const path = require('path');
 
-// Adjusted paths for routes
-const authRoutes = require('./routes/auth');
-const dashboardRoutes = require('./routes/dashboard');
-const adminRoutes = require('./routes/admin');
-const matchesRoutes = require('./routes/matches');
+// Use path.resolve to construct absolute paths
+const authRoutes = require(path.resolve(__dirname, './routes/auth'));
+const dashboardRoutes = require(path.resolve(__dirname, './routes/dashboard'));
+const adminRoutes = require(path.resolve(__dirname, './routes/admin'));
+const matchesRoutes = require(path.resolve(__dirname, './routes/matches'));
 
 const app = express();
 
