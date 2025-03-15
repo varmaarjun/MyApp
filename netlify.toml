@@ -2,8 +2,19 @@
 functions = "netlify/functions"
 publish = "public"
 
+[functions]
+  # Set function timeout to 30 seconds (default is 10 seconds)
+  timeout = 30
+
 [[redirects]]
 # Redirect all undefined routes to index.html for SPA handling
 from = "/*"
 to = "/index.html"
 status = 200
+
+[[redirects]]
+  # Exclude API routes from SPA redirects
+  from = "/.netlify/functions/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true

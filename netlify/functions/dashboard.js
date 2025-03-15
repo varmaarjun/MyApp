@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 // Reuse the MongoDB connection
 let isConnected = false;
@@ -21,17 +22,37 @@ const connectDB = async () => {
 exports.handler = async (event, context) => {
   await connectDB(); // Ensure the database is connected
 
-  const { httpMethod, queryStringParameters } = event;
+  const { httpMethod, headers, queryStringParameters } = event;
 
   console.log('Received event:', event); // Debugging
 
   if (httpMethod === 'GET') {
     try {
+      // Authenticate the token
+      const token = headers.authorization?.split(' ')[1];
+      if (!token) {
+        return {
+          statusCode: 401,
+          body: JSON.stringify({ message: 'Access denied. No token provided.' }),
+        };
+      }
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.userId;
+
       // Check if userId is provided
       if (!queryStringParameters || !queryStringParameters.userId) {
         return {
           statusCode: 400,
           body: JSON.stringify({ message: 'userId query parameter is required' }),
+        };
+      }
+
+      // Ensure the userId in the token matches the userId in the query parameters
+      if (userId !== queryStringParameters.userId) {
+        return {
+          statusCode: 403,
+          body: JSON.stringify({ message: 'Access denied. Invalid user ID.' }),
         };
       }
 
@@ -60,6 +81,14 @@ exports.handler = async (event, context) => {
       };
     } catch (err) {
       console.error('Error fetching user data:', err); // Debugging
+
+      if (err.name === 'JsonWebTokenError') {
+        return {
+          statusCode: 401,
+          body: JSON.stringify({ message: 'Invalid token' }),
+        };
+      }
+
       return {
         statusCode: 500,
         body: JSON.stringify({ message: 'Error fetching user data', error: err.message }),
