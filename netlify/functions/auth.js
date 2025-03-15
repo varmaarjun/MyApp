@@ -55,7 +55,7 @@ exports.handler = async (event, context) => {
                     };
                 }
 
-                const existingUser = await mongoose.model('User').findOne({ email });
+                const existingUser = await User.findOne({ email });
                 if (existingUser) {
                     return {
                         statusCode: 400,
@@ -72,15 +72,31 @@ exports.handler = async (event, context) => {
                     body: JSON.stringify({ message: 'User registered successfully' }),
                 };
             } else if (path.endsWith('/login')) {
-                const user = await mongoose.model('User').findOne({ email });
-                if (!user || !(await bcrypt.compare(password, user.password))) {
+                // Find user by email
+                const user = await User.findOne({ email });
+                if (!user) {
                     return {
                         statusCode: 401,
-                        body: JSON.stringify({ message: 'Invalid email or password' }),
+                        body: JSON.stringify({ message: 'Invalid email or password.' }),
                     };
                 }
 
-                const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+                // Compare password
+                const isPasswordValid = await bcrypt.compare(password, user.password);
+                if (!isPasswordValid) {
+                    return {
+                        statusCode: 401,
+                        body: JSON.stringify({ message: 'Invalid email or password.' }),
+                    };
+                }
+
+                // Generate JWT
+                const token = jwt.sign(
+                    { userId: user._id, role: user.role },
+                    process.env.JWT_SECRET,
+                    { expiresIn: '1h' }
+                );
+
                 return {
                     statusCode: 200,
                     body: JSON.stringify({ token }),
