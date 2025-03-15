@@ -1,4 +1,4 @@
-const User = require('../../models/user'); // Adjust the path to your User model
+const User = require('./models/user'); // Adjust the path to your User model
 
 exports.handler = async (event, context) => {
   const { httpMethod } = event;

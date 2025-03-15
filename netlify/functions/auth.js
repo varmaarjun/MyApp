@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../../models/user'); // Adjust the path to your User model
+const User = require('./models/user'); // Adjust the path to your User model
 
 exports.handler = async (event, context) => {
   const { httpMethod, body } = event;

@@ -1,4 +1,4 @@
-const Match = require('../../models/match'); // Adjust the path to your Match model
+const Match = require('./models/match'); // Adjust the path to your Match model
 
 exports.handler = async (event, context) => {
   const { httpMethod, body } = event;
