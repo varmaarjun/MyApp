@@ -41,7 +41,7 @@
             const loadingSpinner = document.getElementById('loading');
             loadingSpinner.style.display = 'block'; // Show loading spinner
 
-            const response = await fetch('/.netlify/functions/dashboard/data', {
+            const response = await fetch(`/.netlify/functions/dashboard/data`, {
                 method: 'GET',
                 headers: { 'Authorization': 'Bearer ' + token }
             });
