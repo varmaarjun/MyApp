@@ -21,9 +21,9 @@
             </div>
         </div>
         <div class="dashboard-content">
+            <div id="loading" class="loading-spinner">Loading...</div>
             <div class="card">
                 <h3>Players List</h3>
-                
                 <table id="playersTable">
                     <thead>
                         <tr>
@@ -54,13 +54,25 @@
                 return;
             }
 
-            const response = await fetch('/dashboard/data', {
-                method: 'GET',
-                headers: { 'Authorization': 'Bearer ' + token }
-            });
+            const loadingSpinner = document.getElementById('loading');
+            loadingSpinner.style.display = 'block'; // Show loading spinner
 
-            if (response.ok) {
+            try {
+                const response = await fetch('/.netlify/functions/dashboard', {
+                    method: 'GET',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch dashboard data');
+                }
+
                 const data = await response.json();
+
+                // Check if data is valid
+                if (!data || !data.users || !data.currentUser) {
+                    throw new Error('Invalid data received from the server');
+                }
 
                 // Display the user's first name
                 const userFirstName = data.currentUser.name.split(' ')[0];
@@ -73,6 +85,7 @@
 
                 // Populate the table with player data
                 const playersTableBody = document.getElementById('playersTableBody');
+                playersTableBody.innerHTML = ''; // Clear existing rows
                 data.users.forEach((player, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -90,13 +103,17 @@
                 document.getElementById('adminPanelBtn').addEventListener('click', () => {
                     window.location.href = '/admin-panel.html';
                 });
+
                 // Handle matches button click
                 document.getElementById('matchesBtn').addEventListener('click', () => {
                     window.location.href = '/matches.html';
                 });
 
-            } else {
-                alert('Failed to load dashboard');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to load dashboard. Please try again later.');
+            } finally {
+                loadingSpinner.style.display = 'none'; // Hide loading spinner
             }
 
             // Handle logout

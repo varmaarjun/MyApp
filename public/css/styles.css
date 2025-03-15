@@ -22,6 +22,15 @@ body {
     text-align: center;
 }
 
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    color: #3498db;
+    margin: 20px 0;
+}
+
 .login-box h2, .register-box h2 {
     margin-bottom: 20px;
     color: #333;
