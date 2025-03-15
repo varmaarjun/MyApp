@@ -41,7 +41,7 @@
             const loadingSpinner = document.getElementById('loading');
             loadingSpinner.style.display = 'block'; // Show loading spinner
 
-            const response = await fetch(`/.netlify/functions/dashboard/data`, {
+            const response = await fetch(`/.netlify/functions/dashboard/data${userId}`, {
                 method: 'GET',
                 headers: { 'Authorization': 'Bearer ' + token }
             });
@@ -86,7 +86,7 @@
                 // Handle navigation back to the dashboard
                 const backToDashboardBtn = document.getElementById('backToDashboardBtn');
                 backToDashboardBtn.addEventListener('click', () => {
-                    window.location.href = '/dashboard.html';
+                    window.location.href = './dashboard.html';
                 });
 
             } else {
