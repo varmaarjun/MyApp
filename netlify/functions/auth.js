@@ -25,6 +25,7 @@ exports.handler = async (event, context) => {
     await connectDB(); // Ensure the database is connected
   
     const { httpMethod, body, path } = event;
+    console.log('JWT_SECRET:', process.env.JWT_SECRET); // Debugging
   
     if (httpMethod === 'POST') {
       const { email, password, name } = JSON.parse(body);
