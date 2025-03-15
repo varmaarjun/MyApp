@@ -63,7 +63,7 @@ exports.handler = async (event, context) => {
                     };
                 }
 
-                const hashedPassword = await bcrypt.hash(req.body.password, 10);
+                const hashedPassword = await bcrypt.hash(password, 10);
                 const newUser = new User({ name, email, password: hashedPassword });
                 await newUser.save();
 
@@ -82,7 +82,7 @@ exports.handler = async (event, context) => {
                 }
 
                 // Compare password
-                const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+                const isPasswordValid = await bcrypt.compare(password, user.password);
                 if (!isPasswordValid) {
                     return {
                         statusCode: 401,
