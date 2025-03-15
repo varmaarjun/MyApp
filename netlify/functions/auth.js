@@ -1,6 +1,25 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('./models/user'); // Adjust the path to your User model
+const mongoose = require('mongoose');
+
+
+let isConnected = false;
+const uri = "mongodb+srv://varmaarjun09:6oG1T53PIUYTIKe8@myapp.x2bd7.mongodb.net/cricketBettingDB?retryWrites=true&w=majority";
+const connectDB = async () => {
+  if (isConnected) return;
+
+  try {
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    isConnected = true;
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  }
+};
 
 exports.handler = async (event, context) => {
   const { httpMethod, body } = event;
