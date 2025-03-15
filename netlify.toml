@@ -4,7 +4,10 @@ publish = "public"
 
 [functions]
   # Set function timeout to 30 seconds (default is 10 seconds)
-  timeout = 30
+  # The timeout property must be an object
+  [functions.timeout]
+    default = 30  # Set the default timeout for all functions
+
 
 [[redirects]]
 # Redirect all undefined routes to index.html for SPA handling
