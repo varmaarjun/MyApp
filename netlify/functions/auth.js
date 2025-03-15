@@ -64,7 +64,7 @@ exports.handler = async (event, context) => {
                 }
 
                 const hashedPassword = await bcrypt.hash(password, 10);
-                const newUser = new mongoose.model('User')({ name, email, password: hashedPassword });
+                const newUser = new User({ name, email, password: hashedPassword });
                 await newUser.save();
 
                 return {
