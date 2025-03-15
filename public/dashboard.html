@@ -47,9 +47,28 @@
         <button id="adminPanelBtn" class="admin-button" style="display: none;">Admin Panel</button>
     </div>
     <script>
+        function getUserIdFromToken(token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
+                return payload.userId; // Assuming the token payload contains a `userId` field
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                return null;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
             if (!token) {
+                window.location.href = '/';
+                return;
+            }
+
+            // Fetch the current user's ID from the token
+            const userId = getUserIdFromToken(token);
+
+            if (!userId) {
+                alert('User ID not found. Please log in again.');
                 window.location.href = '/';
                 return;
             }
@@ -58,7 +77,8 @@
             loadingSpinner.style.display = 'block'; // Show loading spinner
 
             try {
-                const response = await fetch('/.netlify/functions/dashboard', {
+                // Include userId as a query parameter
+                const response = await fetch(`/.netlify/functions/dashboard?userId=${userId}`, {
                     method: 'GET',
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
