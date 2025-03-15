@@ -22,63 +22,63 @@ const connectDB = async () => {
 };
 
 exports.handler = async (event, context) => {
-  const { httpMethod, body } = event;
-
-  if (httpMethod === 'POST') {
-    const { email, password, name } = JSON.parse(body);
-
-    if (!email || !password) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Email and password are required' }),
-      };
-    }
-
-    try {
-      if (event.path.includes('/register')) {
-        // Registration logic
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-          return {
-            statusCode: 400,
-            body: JSON.stringify({ message: 'Email already registered' }),
-          };
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword });
-        await newUser.save();
-
+    await connectDB(); // Ensure the database is connected
+  
+    const { httpMethod, body, path } = event;
+  
+    if (httpMethod === 'POST') {
+      const { email, password, name } = JSON.parse(body);
+  
+      if (!email || !password) {
         return {
-          statusCode: 201,
-          body: JSON.stringify({ message: 'User registered successfully' }),
-        };
-      } else if (event.path.includes('/login')) {
-        // Login logic
-        const user = await User.findOne({ email });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-          return {
-            statusCode: 401,
-            body: JSON.stringify({ message: 'Invalid email or password' }),
-          };
-        }
-
-        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        return {
-          statusCode: 200,
-          body: JSON.stringify({ token }),
+          statusCode: 400,
+          body: JSON.stringify({ message: 'Email and password are required' }),
         };
       }
-    } catch (err) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ message: 'Internal server error', error: err.message }),
-      };
+  
+      try {
+        if (path.endsWith('/register')) {
+          const existingUser = await mongoose.model('User').findOne({ email });
+          if (existingUser) {
+            return {
+              statusCode: 400,
+              body: JSON.stringify({ message: 'Email already registered' }),
+            };
+          }
+  
+          const hashedPassword = await bcrypt.hash(password, 10);
+          const newUser = new mongoose.model('User')({ name, email, password: hashedPassword });
+          await newUser.save();
+  
+          return {
+            statusCode: 201,
+            body: JSON.stringify({ message: 'User registered successfully' }),
+          };
+        } else if (path.endsWith('/login')) {
+          const user = await mongoose.model('User').findOne({ email });
+          if (!user || !(await bcrypt.compare(password, user.password))) {
+            return {
+              statusCode: 401,
+              body: JSON.stringify({ message: 'Invalid email or password' }),
+            };
+          }
+  
+          const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+          return {
+            statusCode: 200,
+            body: JSON.stringify({ token }),
+          };
+        }
+      } catch (err) {
+        return {
+          statusCode: 500,
+          body: JSON.stringify({ message: 'Internal server error', error: err.message }),
+        };
+      }
     }
-  }
-
-  return {
-    statusCode: 405,
-    body: JSON.stringify({ message: 'Method not allowed' }),
+  
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ message: 'Method not allowed' }),
+    };
   };
-};
