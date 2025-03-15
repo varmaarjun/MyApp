@@ -29,7 +29,19 @@
                 return;
             }
 
-            const response = await fetch('/dashboard/data', {
+            // Fetch the current user's ID from the token
+            const userId = getUserIdFromToken(token);
+
+            if (!userId) {
+                alert('User ID not found. Please log in again.');
+                window.location.href = '/';
+                return;
+            }
+
+            const loadingSpinner = document.getElementById('loading');
+            loadingSpinner.style.display = 'block'; // Show loading spinner
+
+            const response = await fetch('/.netlify/functions/dashboard/data', {
                 method: 'GET',
                 headers: { 'Authorization': 'Bearer ' + token }
             });
